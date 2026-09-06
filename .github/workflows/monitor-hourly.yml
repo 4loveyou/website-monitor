@@ -1,0 +1,54 @@
+# Alpha123「今日空投」每小时监控（免费云端：GitHub Actions）
+#
+# 重要前提（免费个人账户）：
+# - schedule 定时任务在【公开仓库】免费且分钟数不限；
+# - 私有仓库的 schedule 在免费个人账户下不会触发（需要付费计划）。
+# 本仓库不含任何 Secret：SendKey 通过仓库级 Actions Secret（SC_SENDKEY）注入。
+#
+# 状态持久化：每次运行后仅当 cloud-state/ 下文件有变化才提交，
+# 无变化的小时不会产生提交，避免仓库噪音。
+name: alpha123-hourly-monitor
+
+on:
+  schedule:
+    # 每小时的第 0 分钟触发；允许 5~10 分钟调度延迟
+    - cron: "0 * * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: alpha123-hourly-monitor
+  cancel-in-progress: false
+
+env:
+  TZ: Asia/Shanghai
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run one check
+        env:
+          SC_SENDKEY: ${{ secrets.SC_SENDKEY }}
+        run: |
+          python3 -m website_monitor run \
+            --data-dir cloud-state \
+            --sendkey-env SC_SENDKEY
+
+      - name: Commit durable state if changed
+        run: |
+          git config user.name "website-monitor-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add cloud-state
+          if git diff --cached --quiet; then
+            echo "no durable state change, skip commit"
+          else
+            git commit -m "monitor: update state $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git push
+          fi
