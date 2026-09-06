@@ -4,7 +4,7 @@
   "consecutive_failures": 0,
   "failure_notified": false,
   "last_error": "",
-  "baseline_ts": "20260907T000214+0800",
+  "baseline_ts": "20260907T050232+0800",
   "boards": {
     "today": [
       {
@@ -13,9 +13,9 @@
         "points": "",
         "amount": "",
         "date": "2026-09-07",
-        "time": "",
+        "time": "20:00",
         "event_date": "2026-09-07",
-        "time_display": "2026-09-07 待公布",
+        "time_display": "2026-09-07 20:00",
         "phase": 1,
         "status": "announced",
         "type": ""
