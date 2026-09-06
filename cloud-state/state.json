@@ -4,10 +4,9 @@
   "consecutive_failures": 0,
   "failure_notified": false,
   "last_error": "",
-  "baseline_ts": "20260906T230241+0800",
+  "baseline_ts": "20260907T000214+0800",
   "boards": {
-    "today": [],
-    "upcoming": [
+    "today": [
       {
         "token": "CNPY",
         "name": "Canopy",
@@ -21,6 +20,7 @@
         "status": "announced",
         "type": ""
       }
-    ]
+    ],
+    "upcoming": []
   }
 }
