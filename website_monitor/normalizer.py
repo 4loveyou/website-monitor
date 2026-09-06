@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-"""Alpha123 数据标准化 + 「今日空投」语义还原。
+"""Alpha123 数据标准化 + 「今日空投 / 空投预告」语义还原。
 
 依据前端 /zh/index.html 内嵌逻辑还原：
 1. API 的 date/time 为北京时间（UTC+8，无夏令时）；
 2. phase=2（二段空投）事件时间 = 公布时间 + 18 小时；
 3. 只有日期没有时间的空投按当天处理（前端以 14:00 北京时间为锚，UTC+8 下日期不变）；
-4. 「今日空投」= 事件发生在北京今天；无日期的 ongoing/active/live 项按前端规则纳入。
+4. 「今日空投」= 事件发生在北京今天；无日期的 ongoing/active/live 项按前端规则纳入；
+5. 「空投预告」= 事件发生在北京今天之后（date-only 与带时间项统一按事件北京日期判断）。
 """
 
 from __future__ import annotations
@@ -108,28 +109,42 @@ def canonical_item(raw: dict) -> dict | None:
     }
 
 
-def extract_today_snapshot(
-    payload: dict, today: date | None = None
-) -> list[dict]:
-    """从 API payload 还原当前「今日空投」规范列表（含排序）。"""
+def _sort_key(item: dict):
+    return (
+        item.get("event_date") or "9999-12-31",
+        item.get("token", "").lower(),
+        item.get("time") or "",
+    )
+
+
+def extract_boards(payload: dict, today: date | None = None) -> dict[str, list[dict]]:
+    """从 API payload 还原「今日空投 / 空投预告」两个规范列表。"""
     today = today or today_beijing()
-    result: list[dict] = []
+    today_iso = today.isoformat()
+    today_list: list[dict] = []
+    upcoming_list: list[dict] = []
     for raw in payload.get("airdrops") or []:
         item = canonical_item(raw)
         if item is None:
             continue
         if item["date"]:
-            if item["event_date"] == today.isoformat():
-                result.append(item)
+            if not item["event_date"]:
+                continue
+            if item["event_date"] == today_iso:
+                today_list.append(item)
+            elif item["event_date"] > today_iso:
+                upcoming_list.append(item)
         else:
             # 无日期：仅 ongoing/active/live 按前端规则纳入今日
             if item["status"] in ONGOING_STATUSES:
-                result.append(item)
-    result.sort(
-        key=lambda i: (
-            i["event_date"] or "9999-12-31",
-            i["token"].lower(),
-            i["time"] or "",
-        )
-    )
-    return result
+                today_list.append(item)
+    today_list.sort(key=_sort_key)
+    upcoming_list.sort(key=_sort_key)
+    return {"today": today_list, "upcoming": upcoming_list}
+
+
+def extract_today_snapshot(
+    payload: dict, today: date | None = None
+) -> list[dict]:
+    """兼容包装：只取「今日空投」列表。"""
+    return extract_boards(payload, today=today)["today"]

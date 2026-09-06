@@ -15,11 +15,12 @@ from pathlib import Path
 def _default_state() -> dict:
     return {
         "init_done": False,
+        "upcoming_init_done": False,
         "consecutive_failures": 0,
         "failure_notified": False,
         "last_error": "",
         "baseline_ts": None,
-        "snapshot": [],
+        "boards": {"today": [], "upcoming": []},
     }
 
 
