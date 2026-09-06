@@ -1,8 +1,26 @@
 {
   "init_done": true,
+  "upcoming_init_done": true,
   "consecutive_failures": 0,
   "failure_notified": false,
   "last_error": "",
-  "baseline_ts": "20260906T223953+0800",
-  "snapshot": []
+  "baseline_ts": "20260906T230241+0800",
+  "boards": {
+    "today": [],
+    "upcoming": [
+      {
+        "token": "CNPY",
+        "name": "Canopy",
+        "points": "",
+        "amount": "",
+        "date": "2026-09-07",
+        "time": "",
+        "event_date": "2026-09-07",
+        "time_display": "2026-09-07 待公布",
+        "phase": 1,
+        "status": "announced",
+        "type": ""
+      }
+    ]
+  }
 }
