@@ -4,23 +4,9 @@
   "consecutive_failures": 0,
   "failure_notified": false,
   "last_error": "",
-  "baseline_ts": "20260910T195515+0800",
+  "baseline_ts": "20260911T005922+0800",
   "boards": {
-    "today": [
-      {
-        "token": "BSB",
-        "name": "Block Street",
-        "points": "246",
-        "amount": "342",
-        "date": "2026-09-10",
-        "time": "19:00",
-        "event_date": "2026-09-10",
-        "time_display": "2026-09-10 19:00",
-        "phase": 1,
-        "status": "ongoing",
-        "type": "grab"
-      }
-    ],
+    "today": [],
     "upcoming": []
   }
 }
