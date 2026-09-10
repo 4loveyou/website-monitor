@@ -1,5 +1,6 @@
 # Alpha123「今日空投 + 空投预告」监控（免费云端：GitHub Actions）
-# 频率：每 30 分钟（:00 与 :30）；文件路径保持 monitor-hourly.yml（历史名）
+# 频率：每 30 分钟（:07 与 :37，避开整点高负载，降低被延迟/丢弃概率）
+# 文件路径保持 monitor-hourly.yml（历史名）；运行入口每轮一次
 #
 # 重要前提（免费个人账户）：
 # - schedule 定时任务在【公开仓库】免费且分钟数不限；
@@ -12,8 +13,8 @@ name: alpha123-monitor
 
 on:
   schedule:
-    # 每 30 分钟触发（整点与半点）；允许分钟级调度延迟
-    - cron: "*/30 * * * *"
+    # 每 30 分钟触发；刻意避开 :00（GitHub 文档说明整点高负载易导致延迟/丢弃）
+    - cron: "7,37 * * * *"
   workflow_dispatch: {}
 
 permissions:
