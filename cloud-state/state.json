@@ -4,21 +4,21 @@
   "consecutive_failures": 0,
   "failure_notified": false,
   "last_error": "",
-  "baseline_ts": "20260917T060603+0800",
+  "baseline_ts": "20260917T182415+0800",
   "boards": {
     "today": [
       {
         "token": "APM",
         "name": "apM Fashion",
-        "points": "",
-        "amount": "",
+        "points": "235",
+        "amount": "5000",
         "date": "2026-09-17",
         "time": "21:00",
         "event_date": "2026-09-17",
         "time_display": "2026-09-17 21:00",
         "phase": 1,
         "status": "announced",
-        "type": ""
+        "type": "grab"
       }
     ],
     "upcoming": []
